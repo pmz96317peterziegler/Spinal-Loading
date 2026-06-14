@@ -4,7 +4,7 @@ A 2D quasi-static biomechanical model that estimates the **erector-spinae (spina
 
 ![Spinal force versus knee angle](results/spinal_force_vs_knee_angle.png)
 
-> Spinal (erector-spinae) force falls from ~6000 N in a stooped, straight-leg posture to ~2500 N in a deep squat — around a 2.4× reduction in low-back muscle load from posture alone.
+> Spinal (erector-spinae) force falls from ~7000 N in a stooped, straight-leg posture to ~2000 N in a deep squat. Which is around a 3.5× reduction in low-back muscle load from posture alone.
 
 ---
 
