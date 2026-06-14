@@ -2,22 +2,22 @@
 
 A 2D quasi-static biomechanical model that estimates the **erector-spinae (spinal) muscle force** and **hip joint reaction force** required to hold
  a load across a continuum of lifting postures. The body is modeled as a six-link planar chain; **inverse kinematics** generates the postures and a
- **static-equilibrium** analysis solves the internal loads at each one. The motivation is occupational: quantifying *why* "lift with your legs" red
-uces low-back load.
+ **static-equilibrium** analysis solves the internal loads at each one. The motivation is occupational: quantifying *why* "lift with your legs" reduces
+ lower-back load.
 
 ![Spinal force versus knee angle](results/Spinal%20Force%20vs%20Knee%20Angle.png)
 
-> Spinal (erector-spinae) force falls from ~6000 N in a stooped, straight-leg posture to ~2500 N in a deep squat — a ~2.4× reduction in low-back mu
-scle load from posture alone.
+> Spinal (erector-spinae) force falls from ~6000 N in a stooped, straight-leg posture to ~2500 N in a deep squat which is around a 2.4× reduction in low-back muscle
+load from posture alone.
 
 ---
 
 ## Overview
 
-When someone lifts or holds an object, the lower-back muscles and the hip joint carry large internal loads that depend strongly on posture — a stoo
-ped lift loads the spine very differently from a squat. This project quantifies that relationship.
+When someone lifts or holds an object, the lower-back muscles and the hip joint carry large internal loads that depend strongly on posture. A stooped 
+lift loads the spine very differently from a squat. This project quantifies that relationship.
 
-The body is represented as six rigid links — **foot, shank (leg), thigh, trunk–head–neck (THN), upper arm, and forearm-plus-hand** — connected by r
+The body is represented as six rigid links: **foot, shank (leg), thigh, trunk–head–neck (THN), upper arm, and forearm-plus-hand**. These are connected by r
 evolute joints, with the foot fixed to the ground. The model reaches a fixed target hand position through a family of postures, and at each posture
  solves the statics for:
 
@@ -47,8 +47,7 @@ hanks, thighs, arms) carry **double mass** to represent bod–neck is counted on
 
 ### Kinematics (Denavit–Hartenberg)
 
-Each joint contributes a rotation $R(\theta_i)$ about the lation $L_i$ along the segment, written as $4\times4$ homoge
-neous transforms:
+Each joint contributes a rotation $R(\theta_i)$ about the lation $L_i$ along the segment, written as $4\times4$ homogeneous transforms:
 
 $$
 R(\theta_i)=
@@ -82,13 +81,13 @@ $$
 x_{cg} = \frac{\sum_i m_i\,x_{cg,i} + m_o\,x_{cg,o}}{M + m_o}
 $$
 
-### Inverse kinematics — `Compute_IK_Solutions.m`
+### Inverse kinematics: `Compute_IK_Solutions.m`
 
-The six-link chain reaching a 2D hand target is **kinematically redundant** — many joint configurations satisfy the same target. The solver builds
+The six-link chain reaching a 2D hand target is **kinematically redundant**. This means that many joint configurations satisfy the same target. The solver builds
 a forward-kinematics model of the fingertip and uses MATLAB's `fsolve` to drive it to the target $(x,y) = (0.2,\,0.1)\ \text{m}$.
 
 To sample a realistic *family* of solutions rather than one arbitrary pose, it seeds the solver with **20 initial guesses linearly interpolated bet
-ween two reference postures** — a deep squat (bent knee, bent elbow) and a near-upright stance (locked knee, straight arm):
+ween two reference postures**. These include a deep squat (bent knee, bent elbow) and a near-upright stance (locked knee, straight arm):
 
 $$
 \text{guess}_t = (1-t)\,\theta_{\text{squat}} + t\,\theta_{\text{upright}},
@@ -97,7 +96,7 @@ $$
 
 producing 20 postures that smoothly span the squat → stoop range.
 
-### Statics — `Final_Analysis.m`
+### Statics: `Final_Analysis.m`
 
 At each posture, an **imaginary cut at the hip** exposes two internal loads: the **hip joint reaction force** $\vec F_J=(F_{Jx},F_{Jy})$ and the **
 erector-spinae muscle force** $F_m$ acting along the musclThe muscle is modeled with a distal attachment 75 % up the t
