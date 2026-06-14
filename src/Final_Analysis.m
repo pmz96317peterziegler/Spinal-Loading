@@ -14,7 +14,7 @@ g = 9.81; %gravity (m/s/s)
 
 x_target = 0.2;  %(m)
 y_target = 0.1; % (m)
-angles_matrix = compute_IK_solutions(H, x_target, y_target);
+angles_matrix = Compute_IK_Solutions(H, x_target, y_target);
 
 % Storage vectors
 tpn = []; %storage for local position angles 
@@ -252,10 +252,11 @@ for j = 1:size(angles_matrix,1)  % Loop through all rows (positions)
            0 1 unit_vec_muscle(2);
         -rjoint(2) rjoint(1) muscle_m(3)];
 
-    Net_force_vector = [0; mfoot*g+mleg*g+mthigh*g-M*g; -total_weight_m(3)];
+    Net_force_vector = [0; mfoot*g+mleg*g+mthigh*g-(M+mo)*g; -total_weight_m(3)];
 
 
     % original form of Ax=b -> x = A_inv*b
+
     Final_solution = inv(equilibrium_matrix)*Net_force_vector;
 
     F_hip = [Final_solution(1), Final_solution(2), 0];
@@ -271,8 +272,8 @@ for j = 1:size(angles_matrix,1)  % Loop through all rows (positions)
     F_stab = magF_stab*u_spine;
     %the part of the hips force that aligns with the y component of the
     %spines axis.
-    F_shear = F_hip - F_stab;
-    magF_shear = norm(F_shear);
+    perp = [-u_spine(2), u_spine(1), 0];
+    magF_shear = dot(F_hip, perp); 
     MSHV(j) = magF_shear;
     Ferr = norm(F_hip) - sqrt((magF_shear^2)+(magF_stab^2));
     ERR(j) = Ferr;
